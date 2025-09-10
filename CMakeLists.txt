@@ -9,18 +9,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LHAPDF REQUIRED lhapdf)
 
+find_package(tinyxml2 CONFIG REQUIRED)
+
 # Set optimization flags
 set(CMAKE_CXX_FLAGS_RELEASE "-O")
 set(CMAKE_Fortran_FLAGS_RELEASE "-O")
 
 # Create the executable
-add_executable(
-    sys_calc
-    src/SysCalc.cc
-    src/tinyxml2.cpp
-    src/alfas_functions.f
-    src/sys_calc.cc
-)
+add_executable(sys_calc src/SysCalc.cc src/alfas_functions.f src/sys_calc.cc)
 
 target_include_directories(sys_calc PRIVATE include)
 target_include_directories(sys_calc PRIVATE ${LHAPDF_INCLUDE_DIRS})
@@ -30,7 +26,7 @@ target_compile_definitions(sys_calc PRIVATE -DDROP_CGAL)
 
 # Link libraries
 target_link_directories(sys_calc PRIVATE ${LHAPDF_LIBRARY_DIRS})
-target_link_libraries(sys_calc ${LHAPDF_LIBRARIES})
+target_link_libraries(sys_calc PRIVATE ${LHAPDF_LIBRARIES} tinyxml2::tinyxml2)
 
 # Set output directory to match original Makefile behavior
 set_target_properties(
