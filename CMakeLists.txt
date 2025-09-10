@@ -9,29 +9,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LHAPDF REQUIRED lhapdf)
 
-# Include directories
-include_directories(include)
-include_directories(${LHAPDF_INCLUDE_DIRS})
-
-# Add compiler definitions
-add_definitions(-DDROP_CGAL)
-
 # Set optimization flags
 set(CMAKE_CXX_FLAGS_RELEASE "-O")
 set(CMAKE_Fortran_FLAGS_RELEASE "-O")
 
-# Source files
-set(SOURCES
+# Create the executable
+add_executable(
+    sys_calc
     src/SysCalc.cc
     src/tinyxml2.cpp
     src/alfas_functions.f
     src/sys_calc.cc
 )
 
-# Create the executable
-add_executable(sys_calc ${SOURCES})
+target_include_directories(sys_calc PRIVATE include)
+target_include_directories(sys_calc PRIVATE ${LHAPDF_INCLUDE_DIRS})
+
+# Add compiler definitions
+target_compile_definitions(sys_calc PRIVATE -DDROP_CGAL)
 
 # Link libraries
+target_link_directories(sys_calc PRIVATE ${LHAPDF_LIBRARY_DIRS})
 target_link_libraries(sys_calc ${LHAPDF_LIBRARIES})
 
 # Set output directory to match original Makefile behavior
