@@ -37,3 +37,5 @@ set_target_properties(
     sys_calc
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
+
+install(TARGETS sys_calc DESTINATION bin)
